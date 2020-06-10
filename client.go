@@ -52,10 +52,10 @@ func SetPoolSize(size int) ClientOption {
 }
 
 // New creates a new Tile38 client.
-// By default uses redis pool with 5 connections.
+// By default uses redis pool with 10 connections.
 // In debug mode will also print commands which will be sent to the server.
 func New(addr string, opts ...ClientOption) (*Client, error) {
-	params := &clientParams{poolSize: 5}
+	params := &clientParams{poolSize: 10}
 	for _, opt := range opts {
 		opt(params)
 	}
