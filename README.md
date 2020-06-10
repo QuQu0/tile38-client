@@ -13,7 +13,7 @@ go get github.com/b3q/tile38-client
 ```go
 package main
 
-import t38c "github.com/b3q/tile38-client"
+import t38c "github.com/QuQu0/tile38-client"
 
 func main() {
 	client, err := t38c.New("localhost:9851", t38c.Debug)
