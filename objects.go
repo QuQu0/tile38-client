@@ -5,7 +5,7 @@ import (
 	"time"
 
 	geojson "github.com/paulmach/go.geojson"
-	"github.com/tidwall/gjson"
+	// "github.com/tidwall/gjson"
 )
 
 type field struct {
@@ -33,35 +33,41 @@ type Bounds struct {
 }
 
 // Object struct
+// type Object struct {
+// 	FeatureCollection *geojson.FeatureCollection `json:"featureCollection,omitempty"`
+// 	Feature           *geojson.Feature           `json:"feature,omitempty"`
+// 	Geometry          *geojson.Geometry          `json:"geometry,omitempty"`
+// 	String            *string                    `json:"string,omitempty"`
+// }
+
+// Object struct 修改后的
 type Object struct {
-	FeatureCollection *geojson.FeatureCollection `json:"featureCollection,omitempty"`
-	Feature           *geojson.Feature           `json:"feature,omitempty"`
-	Geometry          *geojson.Geometry          `json:"geometry,omitempty"`
-	String            *string                    `json:"string,omitempty"`
+	Type        string    `json:"type"`
+	Coordinates []float64 `json:"coordinates"`
 }
 
 // UnmarshalJSON ...
-func (ob *Object) UnmarshalJSON(data []byte) error {
-	res := gjson.ParseBytes(data)
-	objectType := res.Get("type")
-	if !objectType.Exists() {
-		str := res.String()
-		ob.String = &str
-		return nil
-	}
+// func (ob *Object) UnmarshalJSON(data []byte) error {
+// 	res := gjson.ParseBytes(data)
+// 	objectType := res.Get("type")
+// 	if !objectType.Exists() {
+// 		str := res.String()
+// 		ob.String = &str
+// 		return nil
+// 	}
 
-	var err error
-	switch objectType.String() {
-	case "FeatureCollection":
-		ob.FeatureCollection, err = geojson.UnmarshalFeatureCollection(data)
-	case "Feature":
-		ob.Feature, err = geojson.UnmarshalFeature(data)
-	default:
-		ob.Geometry, err = geojson.UnmarshalGeometry(data)
-	}
+// 	var err error
+// 	switch objectType.String() {
+// 	case "FeatureCollection":
+// 		ob.FeatureCollection, err = geojson.UnmarshalFeatureCollection(data)
+// 	case "Feature":
+// 		ob.Feature, err = geojson.UnmarshalFeature(data)
+// 	default:
+// 		ob.Geometry, err = geojson.UnmarshalGeometry(data)
+// 	}
 
-	return err
-}
+// 	return err
+// }
 
 // GetResponse struct
 type GetResponse struct {
@@ -73,35 +79,46 @@ type GetResponse struct {
 }
 
 // SearchResponse struct
+// type SearchResponse struct {
+// 	Cursor  int      `json:"cursor"`
+// 	Count   int      `json:"count"`
+// 	Fields  []string `json:"fields,omitempty"`
+// 	Objects []struct {
+// 		ID       string    `json:"ID"`
+// 		Object   Object    `json:"object"`
+// 		Fields   []float64 `json:"fields,omitempty"`
+// 		Distance *float64  `json:"distance,omitempty"`
+// 	} `json:"objects,omitempty"`
+// 	Points []struct {
+// 		ID       string    `json:"ID"`
+// 		Point    Point     `json:"point"`
+// 		Fields   []float64 `json:"fields,omitempty"`
+// 		Distance *float64  `json:"distance,omitempty"`
+// 	} `json:"points,omitempty"`
+// 	Bounds []struct {
+// 		ID       string    `json:"ID"`
+// 		Bounds   Bounds    `json:"bounds"`
+// 		Fields   []float64 `json:"fields,omitempty"`
+// 		Distance *float64  `json:"distance,omitempty"`
+// 	} `json:"bounds,omitempty"`
+// 	Hashes []struct {
+// 		ID       string    `json:"id"`
+// 		Hash     string    `json:"hash"`
+// 		Fields   []float64 `json:"fields,omitempty"`
+// 		Distance *float64  `json:"distance,omitempty"`
+// 	} `json:"hashes,omitempty"`
+// 	IDs []string `json:"ids,omitempty"`
+// }
+
+// SearchResponse struct 修改后的
 type SearchResponse struct {
-	Cursor  int      `json:"cursor"`
-	Count   int      `json:"count"`
-	Fields  []string `json:"fields,omitempty"`
+	Cursor int `json:"cursor"`
+	Count  int `json:"count"`
+
 	Objects []struct {
-		ID       string    `json:"ID"`
-		Object   Object    `json:"object"`
-		Fields   []float64 `json:"fields,omitempty"`
-		Distance *float64  `json:"distance,omitempty"`
+		ID     string `json:"id"`
+		Object Object `json:"object"`
 	} `json:"objects,omitempty"`
-	Points []struct {
-		ID       string    `json:"ID"`
-		Point    Point     `json:"point"`
-		Fields   []float64 `json:"fields,omitempty"`
-		Distance *float64  `json:"distance,omitempty"`
-	} `json:"points,omitempty"`
-	Bounds []struct {
-		ID       string    `json:"ID"`
-		Bounds   Bounds    `json:"bounds"`
-		Fields   []float64 `json:"fields,omitempty"`
-		Distance *float64  `json:"distance,omitempty"`
-	} `json:"bounds,omitempty"`
-	Hashes []struct {
-		ID       string    `json:"id"`
-		Hash     string    `json:"hash"`
-		Fields   []float64 `json:"fields,omitempty"`
-		Distance *float64  `json:"distance,omitempty"`
-	} `json:"hashes,omitempty"`
-	IDs []string `json:"ids,omitempty"`
 }
 
 // OutputFormat ...
